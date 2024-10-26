@@ -30,14 +30,15 @@ def verify_slack_request(request):
 def push_to_queue(message):
     if settings.QUEUE_SERVICE == 'rabbitmq':
         # Use RabbitMQ (Local Development)
+        queue = os.getenv('QUEUE_NAME')
         connection = pika.BlockingConnection(pika.URLParameters(os.getenv('RABBITMQ_URL')))
         channel = connection.channel()
-        channel.queue_declare(queue='dlp_queue', durable=True)
+        channel.queue_declare(queue=queue, durable=True)
         channel.basic_publish(exchange='',
-                              routing_key='dlp_queue',
+                              routing_key=queue,
                               body=json.dumps(message),
                               properties=pika.BasicProperties(
-                                  delivery_mode=2,  # make message persistent
+                                  delivery_mode=2,
                               ))
         connection.close()
     elif settings.QUEUE_SERVICE == 'sqs':

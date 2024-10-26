@@ -3,6 +3,7 @@ from django.db import models
 class Pattern(models.Model):
     name = models.CharField(max_length=255)
     regex = models.TextField(help_text="Regular expression pattern to detect sensitive data")
+    enabled = models.BooleanField(default=True, help_text="Whether the pattern is enabled")
     description = models.TextField(null=True, blank=True, help_text="Description of the pattern")
 
     def __str__(self):
