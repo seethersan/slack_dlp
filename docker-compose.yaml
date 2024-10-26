@@ -6,7 +6,7 @@ services:
     ports:
       - "8000:8000"
     env_file:
-     - ./.env
+     - ./app/.env
     depends_on:
       - db
       - rabbitmq
@@ -30,6 +30,15 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+
+  dlp_manager:
+    build: ./dlp_container
+    container_name: dlp_manager
+    command: python run.py
+    env_file:
+      - ./dlp_container/.env
+    depends_on:
+      - rabbitmq
 
 volumes:
   db_data:
