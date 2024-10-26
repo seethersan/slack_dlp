@@ -5,16 +5,8 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     ports:
       - "8000:8000"
-    environment:
-      - DJANGO_DEBUG=1
-      - DJANGO_SECRET_KEY=your_secret_key
-      - DJANGO_ALLOWED_HOSTS=localhost
-      - MYSQL_DATABASE=dlp_project
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=password
-      - MYSQL_HOST=db
-      - MYSQL_PORT=3306
-      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+    env_file:
+     - ./.env
     depends_on:
       - db
       - rabbitmq

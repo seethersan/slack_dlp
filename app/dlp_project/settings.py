@@ -145,3 +145,7 @@ def get_rabbitmq_connection():
     if RABBITMQ_URL is None:
         return None
     return pika.BlockingConnection(pika.URLParameters(RABBITMQ_URL))
+
+SLACK_SIGNING_SECRET = os.getenv('SLACK_SIGNING_SECRET')
+SLACK_BOT_TOKEN = os.getenv('SLACK_BOT_TOKEN')
+QUEUE_SERVICE = os.getenv('QUEUE_SERVICE')
