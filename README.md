@@ -36,21 +36,44 @@ The project consists of:
 ## Project Structure
 
 ```
-dlp_project/
-├── dlp/
-│   ├── admin.py                # Django admin setup for managing regex patterns
-│   ├── models.py               # Models for Patterns and Scanned Messages
-│   ├── serializers.py          # Serializers for API responses
-│   ├── views.py                # API views for managing patterns and saving results
-│   ├── management/
-│   │   └── commands/
-│   │       └── create_patterns.py # Management command to create default regex patterns
-│   ├── urls.py                 # Django URLs for the API
-│   └── ...
-├── dlp_manager.py              # DLP Manager for processing messages
-├── Dockerfile                  # Dockerfile for the Django app
-├── docker-compose.yml          # Docker Compose configuration
-└── README.md                   # Project readme (this file)
+├── README.md
+├── app
+│   ├── Dockerfile
+│   ├── db.sqlite3
+│   ├── dlp
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── api
+│   │   │   ├── serializers.py
+│   │   │   └── views.py
+│   │   ├── apps.py
+│   │   ├── management
+│   │   │   └── commands
+│   │   │       └── create_patterns.py
+│   │   ├── migrations
+│   │   │   ├── 0001_initial.py
+│   │   │   ├── 0002_pattern_enabled.py
+│   │   │   ├── __init__.py
+│   │   ├── models.py
+│   │   ├── tests.py
+│   │   ├── urls.py
+│   │   └── views.py
+│   ├── dlp_project
+│   │   ├── __init__.py
+│   │   ├── asgi.py
+│   │   ├── settings.py
+│   │   ├── urls.py
+│   │   └── wsgi.py
+│   ├── entrypoint.sh
+│   ├── manage.py
+│   └── requirements.txt
+├── dlp_container
+│   ├── Dockerfile
+│   ├── manager.py
+│   ├── requirements.txt
+│   ├── run.py
+│   └── tasks.py
+└── docker-compose.yaml
 ```
 
 ## Prerequisites
@@ -69,18 +92,33 @@ cd dlp_project
 
 ### Step 2: Create the Environment Variables
 
-Create a `.env` file in the root of your project to store the necessary environment variables. Example:
+Create a `.env` file in the app folder of your project to store the necessary environment variables. Example:
 
 ```
-DJANGO_SECRET_KEY=your_secret_key
-MYSQL_DATABASE=dlp_project
-MYSQL_USER=user
-MYSQL_PASSWORD=password
-MYSQL_HOST=db
-MYSQL_PORT=3306
-RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
-DLP_API_PATTERNS_URL=http://web:8000/dlp/api/patterns/
-DLP_API_SAVE_MATCH_URL=http://web:8000/dlp/api/save_match/
+DJANGO_DEBUG="1"
+DJANGO_SECRET_KEY="secret-key"
+DJANGO_ALLOWED_HOSTS="*"
+DJANGO_CSRF_TRUSTED_ORIGINS="*"
+MYSQL_DATABASE="dlp_project"
+MYSQL_USER="user"
+MYSQL_PASSWORD="password"
+MYSQL_HOST="db"
+MYSQL_PORT="3306"
+QUEUE_SERVICE="rabbitmq"
+RABBITMQ_URL="amqp://guest:guest@rabbitmq:5672/"
+QUEUE_NAME="dlp_queue"
+SLACK_SIGNING_SECRET=""
+SLACK_BOT_TOKEN=""
+```
+
+Create a `.env` file in the app folder of your project to store the necessary environment variables. Example:
+
+```
+QUEUE_SERVICE="rabbitmq"
+RABBITMQ_URL="amqp://guest:guest@rabbitmq:5672/"
+QUEUE_NAME=""
+DLP_API_PATTERNS_URL="http://web:8000/dlp/api/patterns/"
+DLP_API_SAVE_MATCH_URL="http://web:8000/dlp/api/save_match/"
 ```
 
 ### Step 3: Build and Run the Containers
