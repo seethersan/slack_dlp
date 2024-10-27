@@ -87,7 +87,7 @@ The project consists of:
 
 ```bash
 git clone <repository-url>
-cd dlp_project
+cd slack_dlp
 ```
 
 ### Step 2: Create the Environment Variables
